@@ -11,6 +11,9 @@ This repo is a job application workspace. Claude acts as a career advisor and ap
 4. **Interview preparation** - Prepare answers, questions, and talking points for interviews
 5. **Career strategy** - Advise on positioning and personal branding
 
+## Conversation Style
+Once you have answered something, treat that answer as done. Focus on what I'm asking now, and don't go back over an earlier answer unless I ask about it or point out a problem with it.
+
 ## Candidate Profile
 
 <!-- This section is auto-populated by /setup. You can also fill it in manually. -->
