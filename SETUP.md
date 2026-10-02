@@ -128,7 +128,7 @@ This creates `salary_data.json` which the `/apply` workflow uses for salary benc
 Setup:
 
 1. Install [uv](https://docs.astral.sh/uv/) and get an API key at https://aistudio.google.com/apikey
-2. Export the key before starting Claude Code: `export GEMINI_API_KEY=...` (optionally `GEMINI_MODEL` to override the default `gemini-2.5-flash`)
+2. Export the key before starting Claude Code: `export GEMINI_API_KEY=...` (optionally `GEMINI_MODEL` to override the default `gemini-flash-latest` alias, e.g. `gemini-3.8-flash`)
 3. Start Claude Code from the repo root. The project-scoped `.mcp.json` registers the server automatically, so you only need to approve it once.
 
 To register it manually instead (e.g. for use outside this repo):

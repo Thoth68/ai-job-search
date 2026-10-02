@@ -16,12 +16,14 @@ Or rely on the project-scoped .mcp.json checked into this repo.
 """
 
 import os
+import time
 
 from google import genai
+from google.genai import errors
 from google.genai import types
 from mcp.server.fastmcp import FastMCP
 
-DEFAULT_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+DEFAULT_MODEL = os.environ.get("GEMINI_MODEL", "gemini-flash-latest")
 
 mcp = FastMCP("gemini")
 _client = None
@@ -38,6 +40,17 @@ def _get_client():
             )
         _client = genai.Client(api_key=api_key)
     return _client
+
+
+def _generate(**kwargs):
+    """generate_content with a short retry on transient 503 overload errors."""
+    for attempt in range(3):
+        try:
+            return _get_client().models.generate_content(**kwargs)
+        except errors.ServerError as e:
+            if e.code != 503 or attempt == 2:
+                raise
+            time.sleep(2 * (attempt + 1))
 
 
 def _sources(response):
@@ -59,7 +72,7 @@ def gemini_query(prompt: str, model: str = "") -> str:
 
     Use for second opinions, rewriting, summarising, or reasoning tasks.
     """
-    response = _get_client().models.generate_content(
+    response = _generate(
         model=model or DEFAULT_MODEL,
         contents=prompt,
     )
@@ -74,7 +87,7 @@ def gemini_research(query: str, model: str = "") -> str:
     research, recent news, salary context, and fact-checking claims before
     they go into a CV or cover letter.
     """
-    response = _get_client().models.generate_content(
+    response = _generate(
         model=model or DEFAULT_MODEL,
         contents=query,
         config=types.GenerateContentConfig(
