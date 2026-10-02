@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "gemini": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "mcp[cli]<2",
+        "--with",
+        "google-genai",
+        "mcp",
+        "run",
+        "tools/gemini_server.py"
+      ]
+    }
+  }
+}

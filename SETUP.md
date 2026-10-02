@@ -118,6 +118,29 @@ If you have salary data (from a union, salary survey, Glassdoor, or personal res
 
 This creates `salary_data.json` which the `/apply` workflow uses for salary benchmarking. If you skip this step, salary lookup is simply omitted.
 
+### Optional: Gemini research server (MCP)
+
+`tools/gemini_server.py` exposes Google Gemini to Claude Code as two MCP tools:
+
+- `gemini_research`: answers grounded in live Google Search results, with source URLs (company research, fact-checking claims before they go into a CV or cover letter)
+- `gemini_query`: plain Gemini prompt, for a second opinion or a rewrite
+
+Setup:
+
+1. Install [uv](https://docs.astral.sh/uv/) and get an API key at https://aistudio.google.com/apikey
+2. Export the key before starting Claude Code: `export GEMINI_API_KEY=...` (optionally `GEMINI_MODEL` to override the default `gemini-2.5-flash`)
+3. Start Claude Code from the repo root. The project-scoped `.mcp.json` registers the server automatically, so you only need to approve it once.
+
+To register it manually instead (e.g. for use outside this repo):
+
+```bash
+claude mcp add gemini -- \
+  uv run --with "mcp[cli]<2" --with google-genai \
+  mcp run /absolute/path/to/ai-job-search/tools/gemini_server.py
+```
+
+Keep the `mcp[cli]<2` pin: mcp 2.x removed `FastMCP`, and the server won't start with it.
+
 ## 6. Test the workflow
 
 Find a job posting you're interested in, then:
